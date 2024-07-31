@@ -1,95 +1,54 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+import { SingleTicker, SymbolOverview } from 'react-ts-tradingview-widgets';
+import styles from './page.module.css';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Home() {
+  const data = ['WMT', 'AMZN', 'AAPL', 'UNH']
+  const overviewData = ['CVS', 'VOW', 'MCK', 'GOOG', 'COR', 'COST', 'JPM', 'TTE']
+  // let isDarkMode = 0;
+  const [isDarkMode, setDarkMode] = useState(true);
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
+      <div className={styles.justifyBetween}>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          <Image src="/logo.jpeg" alt="Stock Market" width={200} height={50} />
+        </div>
+        <div>
+          <p className="dark-mode-title">Dark Mode</p>
+          <input
+            type="checkbox"
+            className="checkbox"
+            id="checkbox"
+            onChange={() => setDarkMode(!isDarkMode)}
+          />
+          <label className="switch" htmlFor="checkbox"></label>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      <h1>Stock Dashboard</h1>
+      <div>
+        <SymbolOverview colorTheme="dark"
+          chartType="candlesticks"
+          downColor="#800080"
+          borderDownColor="#800080"
+          wickDownColor="#800080"
+          dateFormat="dd MMM 'yy" />
       </div>
-
       <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        {data.map((item, index) => (
+          <SingleTicker colorTheme={isDarkMode ? 'dark' : 'light'} key={index} symbol={item} width={280} />
+        ))}
       </div>
+
+      <h2>Overview - Today</h2>
+      <div className={styles.grid}>
+        {overviewData.map((item, index) => (
+          <SingleTicker colorTheme={isDarkMode ? 'dark' : 'light'} key={index} symbol={item} width={280} />
+        ))}
+      </div>
+      <style>{`.tradingview-widget-copyright {display: none !important; }`}</style>
     </main>
   );
 }
